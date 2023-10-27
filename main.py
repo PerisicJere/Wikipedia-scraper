@@ -4,8 +4,6 @@ import csv
 import os
 
 
-
-
 def get_wikipedia_pages_and_links(wiki_link_to_scrape):
     res = requests.get(wiki_link_to_scrape).text
     wiki_link = 'https://en.wikipedia.org'
@@ -14,21 +12,27 @@ def get_wikipedia_pages_and_links(wiki_link_to_scrape):
     div_instances = soup.find('div', class_='mw-parser-output')
     a_instances = div_instances.find_all('a')
 
-    links = {}
+    titles = []
+    lst_links = []
     for link in a_instances:
         url = link.get('href', '')
         if "/wiki/" in url:
-            links[link.text.strip()] = wiki_link + ''.join(url)
-
+            titles.append(link.text.strip())
+            lst_links.append(wiki_link + ''.join(url))
+    links = {'Wikipedia page': titles,
+             'Links': lst_links
+             }
+    print(links)
     write_csv_files_from_dictionary(links)
 
 
 def write_csv_files_from_dictionary(links):
     file = 'Physics.csv'
     with open(file, 'w', newline='') as f:
-        writer = csv.DictWriter(f, fieldnames=links.keys())
-        writer.writeheader()
-        writer.writerow(links)
+        writer = csv.writer(f)
+        writer.writerow(links.keys())
+        for itr in range(len(links.keys())):
+            writer.writerow([val[itr] for val in links.values()])
 
 
 if __name__ == "__main__":
