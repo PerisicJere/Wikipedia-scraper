@@ -58,7 +58,7 @@ def get_wikipedia_pages_and_links(wiki_link_to_scrape):
 
 # Function to write data from a dictionary to a CSV file
 def write_csv_files_from_dictionary(links, length):
-    file = 'new.csv'
+    file = 'Physics.csv'
     with open(file, 'w', newline='') as f:
         writer = csv.writer(f)
         writer.writerow(links.keys())
