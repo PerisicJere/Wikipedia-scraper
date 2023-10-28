@@ -22,19 +22,21 @@ def get_wikipedia_pages_and_links(wiki_link_to_scrape):
     links = {'Wikipedia page': titles,
              'Links': lst_links
              }
-    print(links)
-    write_csv_files_from_dictionary(links)
+    write_csv_files_from_dictionary(links, len(titles))
 
 
-def write_csv_files_from_dictionary(links):
+def write_csv_files_from_dictionary(links, length):
     file = 'Physics.csv'
     with open(file, 'w', newline='') as f:
         writer = csv.writer(f)
         writer.writerow(links.keys())
-        for itr in range(len(links.keys())):
+        for itr in range(length):
             writer.writerow([val[itr] for val in links.values()])
+        print(f'Csv file is finished')
 
 
 if __name__ == "__main__":
-    link = "https://en.wikipedia.org/wiki/List_of_physics_concepts_in_primary_and_secondary_education_curricula"
+    print(f'Wikipedia link must be from wikipedia pages (e.g., List of physics concepts in primary and secondary education curricula)')
+    print(f'Please pass valid wikipedia link')
+    link = input('Valid link: ')
     get_wikipedia_pages_and_links(link)
