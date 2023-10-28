@@ -1,8 +1,9 @@
+import re
+
 from bs4 import BeautifulSoup
 import requests
 import csv
-import os
-
+import wikipedia as w
 
 def get_wikipedia_pages_and_links(wiki_link_to_scrape):
     res = requests.get(wiki_link_to_scrape).text
@@ -35,8 +36,25 @@ def write_csv_files_from_dictionary(links, length):
         print(f'Csv file is finished')
 
 
+def see_also_links_titles():
+    see_also_link = 'https://en.wikipedia.org/wiki/Linear_motion'
+    base_link = 'https://en.wikipedia.org/wiki/'
+    titles = []
+    lst_links = []
+    clean_link = re.sub(base_link,'',see_also_link)
+    see_also = w.page(clean_link).section('See also')
+    all_link_from_see_also = (see_also.split("\n"))
+    for link in all_link_from_see_also:
+        titles.append(link)
+        lst_links.append(base_link+link.replace(' ','_'))
+    print(lst_links)
+
+    links = {'Wikipedia page': titles,
+             'Links': lst_links
+             }
+
+
+
+
 if __name__ == "__main__":
-    print(f'Wikipedia link must be from wikipedia pages (e.g., List of physics concepts in primary and secondary education curricula)')
-    print(f'Please pass valid wikipedia link')
-    link = input('Valid link: ')
-    get_wikipedia_pages_and_links(link)
+    see_also_links_titles()
